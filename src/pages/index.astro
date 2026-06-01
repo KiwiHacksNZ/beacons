@@ -1,0 +1,135 @@
+---
+const filloutBaseUrl = "https://kiwihacks.fillout.com/nova";
+---
+
+<!doctype html>
+<html lang="en-NZ">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex" />
+    <title>KiwiHacks Signup</title>
+    <link rel="icon" href="data:," />
+  </head>
+  <body>
+    <main>
+      <p class="eyebrow">KiwiHacks Nova</p>
+      <h1>Taking you to signup</h1>
+      <p id="message">Preparing your KiwiHacks signup link…</p>
+      <a id="manual-link" class="button" href={filloutBaseUrl}>Continue to form</a>
+    </main>
+
+    <script>
+      const filloutUrl = new URL("https://kiwihacks.fillout.com/nova");
+      const referralCodeField = "Referral Code";
+
+      const pathCode = window.location.pathname
+        .split("/")
+        .filter(Boolean)[0];
+      const queryCode = new URLSearchParams(window.location.search).get("ref");
+      const refCode = decodeURIComponent(pathCode || queryCode || "").trim();
+
+      if (refCode) {
+        filloutUrl.searchParams.set("ref", refCode);
+        filloutUrl.searchParams.set(referralCodeField, refCode);
+
+        document.getElementById("message").innerHTML =
+          'Your beacon code is <span class="code"></span>.';
+        document.querySelector(".code").textContent = refCode;
+      } else {
+        document.getElementById("message").textContent =
+          "No beacon code was found, but you can still sign up.";
+      }
+
+      const manualLink = document.getElementById("manual-link");
+      manualLink.href = filloutUrl.toString();
+
+      window.setTimeout(() => {
+        window.location.replace(filloutUrl.toString());
+      }, 650);
+    </script>
+  </body>
+</html>
+
+<style>
+  :global(:root) {
+    color-scheme: dark;
+    font-family:
+      Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+      "Segoe UI", sans-serif;
+    background: #07140f;
+    color: #f2fff8;
+  }
+
+  :global(*) {
+    box-sizing: border-box;
+  }
+
+  :global(body) {
+    min-height: 100vh;
+    margin: 0;
+    display: grid;
+    place-items: center;
+    padding: 24px;
+    background:
+      radial-gradient(circle at 30% 20%, rgba(0, 255, 153, 0.22), transparent 30%),
+      radial-gradient(circle at 70% 70%, rgba(33, 150, 243, 0.18), transparent 28%),
+      #07140f;
+  }
+
+  main {
+    width: min(100%, 560px);
+    padding: 40px;
+    border: 1px solid rgba(242, 255, 248, 0.14);
+    border-radius: 28px;
+    background: rgba(7, 20, 15, 0.78);
+    box-shadow: 0 24px 80px rgba(0, 0, 0, 0.3);
+    text-align: center;
+  }
+
+  .eyebrow {
+    margin: 0 0 12px;
+    color: #66ffb2;
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+
+  h1 {
+    margin: 0;
+    font-size: clamp(2rem, 8vw, 4.75rem);
+    line-height: 0.95;
+  }
+
+  p {
+    margin: 18px auto 0;
+    max-width: 34rem;
+    color: rgba(242, 255, 248, 0.78);
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+
+  a {
+    color: inherit;
+  }
+
+  .button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 28px;
+    min-height: 48px;
+    padding: 0 22px;
+    border-radius: 999px;
+    background: #66ffb2;
+    color: #07140f;
+    font-weight: 800;
+    text-decoration: none;
+  }
+
+  .code {
+    font-weight: 800;
+    color: #ffffff;
+  }
+</style>
